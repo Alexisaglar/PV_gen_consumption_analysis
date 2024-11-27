@@ -157,11 +157,12 @@ def plot_consumption(epv_data, sdpv_data, epv_increased):
 
 
 if __name__ == '__main__':
-
+    seasons = ['autumn', 'spring', 'summer', 'winter']
+    potential_energy_profiles = []
     # 22, 23, 24 are the nodes that I would like to create profiles for
     for s in range(irradiance_seasons.shape[1]):
         # calculate the PV power with for different seasons
-        sdpv_power, epv_power, epv_increased = power_generation_pv(irradiance_seasons[:, s], temperature_seasons[:, s]) 
+        sdpv_power, epv_power, epv_increased, total_potential_energy = power_generation_pv(irradiance_seasons[:, s], temperature_seasons[:, s], seasons[s]) 
 
         # calculate node_results depending on the PV material
         node_results_sdpv = calculate_self_consumption(sdpv_power, PEAK_LOAD)
@@ -170,4 +171,8 @@ if __name__ == '__main__':
 
         node_results_epv_increased = calculate_self_consumption(epv_increased, PEAK_LOAD)
 
+        potential_energy_profiles.append(total_potential_energy)
         plot_consumption(node_results_epv, node_results_sdpv, node_results_epv_increased)
+
+    np.save('data/total_percentage_PV_profiles.npy', potential_energy_profiles)
+
