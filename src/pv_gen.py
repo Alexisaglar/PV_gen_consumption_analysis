@@ -27,12 +27,6 @@ def pv_power_plot(data, label, season):
     plt.legend()
     plt.show()
 
-# def plot_power_output(sd, epv):
-#     plt.plot(sd, label='sd')
-#     plt.plot(epv, label='epv')
-#     plt.legend()
-#     plt.show()
-
 def single_diode(irradiance, temperature):
     I_L, I_0, R_s, R_sh, nNsVth = pvsystem.calcparams_desoto(
         effective_irradiance = irradiance,
@@ -63,13 +57,15 @@ def single_diode(irradiance, temperature):
 def actual_pg(technology_output, season):
     # Calculate module power output with single diode diode model
     percentage_output_technology = []
+    technology_df = pd.DataFrame(technology_output)
+
     for i, _ in enumerate(technology_output):
         # print(f'this is the total data im giving: {technology_output}')
         pg_percentage =  technology_output[i] / ((single_diode(1000, 25)* 15) / 10000)
         # plt.plot(pg_percentage)
         # print(f'this is the single value in the array: {pg_percentage}')
         percentage_output_technology.append(pg_percentage)
-        # print(f'this is the total appended in the array: {percentage_output_technology}')
+        print(f'this is the total appended in the array: {percentage_output_technology}')
         # plt.show()
     print(percentage_output_technology)
     plt.plot(np.arange(1, 25), percentage_output_technology[0], label='epv_percentage_potential')
